@@ -41,7 +41,7 @@ const Movies = () => {
     const handleSubmit = e => {
         e.preventDefault();
         setMovies('');
-        updateQuery();
+        updateQuery(query);
     }
 
     // const handleChange = e => {
