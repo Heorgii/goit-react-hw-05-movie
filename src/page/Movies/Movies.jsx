@@ -34,13 +34,15 @@ const Movies = () => {
     const updateQuery = query => {
         const nextParams = query !== '' ? { query } : {};
         setSearchParams(nextParams);
-        console.log(query);
+        // console.log(query);
 
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-        setMovies('');
+        // setMovies();
+        setSearchParams('');
+        console.log(setSearchParams);
         updateQuery(query);
     }
 
