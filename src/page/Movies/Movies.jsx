@@ -5,11 +5,10 @@ import { searchMovie } from "js/movieApi";
 
 const Movies = () => {
     const [movies, setMovies] = useState([]);
-    // const [findMovies, setFindMovies] = useState('');
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const { query } = searchParams.get('query') ?? '';
+    const query = searchParams.get('query') ?? '';
     const location = useLocation();
 
     useEffect(() => {
@@ -19,10 +18,11 @@ const Movies = () => {
 
         const getMovies = async () => {
             try {
-                const result = await searchMovie(query);
-                setMovies(result.results);
-                console.log(result);
                 setError(null);
+
+                const results = await searchMovie(query);
+                setMovies(results);
+                console.log(results);
 
             } catch (error) {
                 setError(error);
@@ -34,22 +34,14 @@ const Movies = () => {
     const updateQuery = query => {
         const nextParams = query !== '' ? { query } : {};
         setSearchParams(nextParams);
-        // console.log(query);
-
+        console.log(nextParams);
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-        // setMovies();
-        setSearchParams('');
-        console.log(setSearchParams);
+        setMovies('');
         updateQuery(query);
     }
-
-    // const handleChange = e => {
-    //     setFindMovies(e.target.value.toLowerCase());
-    // };
-
 
     return (
         <>
