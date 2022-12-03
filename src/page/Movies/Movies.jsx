@@ -11,24 +11,48 @@ const Movies = () => {
     const query = searchParams.get('query') ?? '';
     const location = useLocation();
 
+    // useEffect(() => {
+    //     if (!query) {
+    //         return;
+    //     }
+
+    //     const getMovies = async () => {
+    //         try {
+    //             setError(null);
+
+    //             const results = await searchMovie(query);
+    //             setMovies(results);
+    //             console.log(results);
+
+    //         } catch (error) {
+    //             setError(error);
+    //         }
+    //     }
+    //     getMovies();
+    // }, [query]);
+
+    // const updateQuery = query => {
+    //     const nextParams = query !== '' ? { query } : {};
+    //     setSearchParams(nextParams);
+    //     console.log(nextParams);
+    // };
+
     useEffect(() => {
         if (!query) {
             return;
         }
 
-        const getMovies = async () => {
+        const fetchMovies = async () => {
             try {
                 setError(null);
 
-                const results = await searchMovie(query);
-                setMovies(results);
-                console.log(results);
-
-            } catch (error) {
-                setError(error);
+                const result = await searchMovie(query);
+                setMovies(result.results);
+            } catch (e) {
+                setError(e.toJSON());
             }
-        }
-        getMovies();
+        };
+        fetchMovies();
     }, [query]);
 
     const updateQuery = query => {
@@ -64,12 +88,20 @@ const Movies = () => {
                 </form>
             </header>
 
-            {movies.length > 0 && movies.map(({ id, title }) => (
+            {movies.length > 0 && movies.map(({ id, title, poster_path}) => (
                 <ul>
                     <li key={id}>
                         <Link
                             to={`/movies/${id}`} state={{ from: location }}
                         >
+                            <img
+                                src={
+                                    poster_path
+                                        ? `https://image.tmdb.org/t/p/w300${poster_path}`
+                                        : 'https://bitsofco.de/content/images/2018/12/broken-1.png'
+                                }
+                                width="200" height="150"
+                                alt={title} />
                             <p>{title}</p>
                         </Link>
                     </li>
