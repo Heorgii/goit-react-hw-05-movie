@@ -6,7 +6,7 @@ import { searchMovie } from "js/movieApi";
 const Movies = () => {
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
 
     const query = searchParams.get('query') ?? '';
