@@ -6,10 +6,12 @@ import { searchMovie } from "js/movieApi";
 const Movies = () => {
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
-    const [searchQuery] = useState(''); //setSearchQuery
+    const [searchQuery, setSearchQuery] = useState(''); //setSearchQuery
     const [searchParams, setSearchParams] = useSearchParams();
 
     const query = searchParams.get('query') ?? '';
+    const targ = setSearchQuery.get(query.target.value);
+    // targ = useState();
     const location = useLocation();
 
     useEffect(() => {
@@ -31,16 +33,16 @@ const Movies = () => {
     }, [query]);
 
     const updateQuery = query => {
-        const targ = query.target.value;
-        const nextParams = query !== '' ? { targ } : {};
+        const nextParams = query !== '' ? { query } : {};
         setSearchParams(nextParams);
         console.log(nextParams);
     };
 
     const handleSubmit = e => {
         e.preventDefault();
+        setSearchParams(targ);
         reset();
-        updateQuery();
+        updateQuery(query);
     }
 
     const reset = () => {
