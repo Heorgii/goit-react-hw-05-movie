@@ -6,43 +6,18 @@ import { searchMovie } from "js/movieApi";
 const Movies = () => {
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
 
     const query = searchParams.get('query') ?? '';
     const location = useLocation();
-
-    // useEffect(() => {
-    //     if (!query) {
-    //         return;
-    //     }
-
-    //     const getMovies = async () => {
-    //         try {
-    //             setError(null);
-
-    //             const results = await searchMovie(query);
-    //             setMovies(results);
-    //             console.log(results);
-
-    //         } catch (error) {
-    //             setError(error);
-    //         }
-    //     }
-    //     getMovies();
-    // }, [query]);
-
-    // const updateQuery = query => {
-    //     const nextParams = query !== '' ? { query } : {};
-    //     setSearchParams(nextParams);
-    //     console.log(nextParams);
-    // };
 
     useEffect(() => {
         if (!query) {
             return;
         }
 
-        const fetchMovies = async () => {
+        const getMovies = async () => {
             try {
                 setError(null);
 
@@ -52,20 +27,26 @@ const Movies = () => {
                 setError(e.toJSON());
             }
         };
-        fetchMovies();
+        getMovies();
     }, [query]);
 
     const updateQuery = query => {
-        const nextParams = query !== '' ? { query } : {};
+        const targ = query.target.value;
+        const nextParams = query !== '' ? { targ } : {};
         setSearchParams(nextParams);
         console.log(nextParams);
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-        setMovies('');
-        updateQuery(query);
+        reset();
+        updateQuery();
     }
+
+    const reset = () => {
+        setSearchParams('');
+        setError(null);
+    };
 
     return (
         <>
@@ -74,7 +55,7 @@ const Movies = () => {
                 <form className="SearchForm" onSubmit={handleSubmit}>
                     <input
                         onChange={updateQuery}
-                        value={query}
+                        value={searchQuery}
                         className="SearchForm-input"
                         type="text"
                         autoComplete="off"
@@ -88,7 +69,7 @@ const Movies = () => {
                 </form>
             </header>
 
-            {movies.length > 0 && movies.map(({ id, title, poster_path}) => (
+            {movies.length > 0 && movies.map(({ id, title, poster_path }) => (
                 <ul>
                     <li key={id}>
                         <Link
