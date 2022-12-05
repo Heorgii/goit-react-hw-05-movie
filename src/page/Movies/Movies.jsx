@@ -13,7 +13,7 @@ const Movies = () => {
     const location = useLocation();
 
     useEffect(() => {
-        if (!query) {
+        if (query === '') {
             return;
         }
 
