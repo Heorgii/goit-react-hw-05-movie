@@ -6,7 +6,7 @@ import { searchMovie } from "js/movieApi";
 const Movies = () => {
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
-    const [searchQuery] = useState(''); //setSearchQuery
+    const [searchQuery, setSearchQuery] = useState(''); //setSearchQuery
     const [searchParams, setSearchParams] = useSearchParams();
 
     const query = searchParams.get('query') ?? '';
@@ -34,11 +34,15 @@ const Movies = () => {
         const nextParams = query !== '' ? { query } : {};
         setSearchParams(nextParams);
         console.log(nextParams);
-    };
+    }
+
+    const handleInputChange = e => {
+        setSearchQuery(e.target.value.toLowerCase());
+    }
 
     const handleSubmit = e => {
         e.preventDefault();
-        setSearchParams(e);
+        // setSearchParams(e);
         reset();
         updateQuery(query);
     }
@@ -46,7 +50,7 @@ const Movies = () => {
     const reset = () => {
         setSearchParams('');
         setError(null);
-    };
+    }
 
     return (
         <>
@@ -54,7 +58,7 @@ const Movies = () => {
             <header className="Searchbar">
                 <form className="SearchForm" onSubmit={handleSubmit}>
                     <input
-                        onChange={updateQuery}
+                        onChange={handleInputChange}
                         value={searchQuery}
                         className="SearchForm-input"
                         type="text"
