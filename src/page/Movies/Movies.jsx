@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import Notiflix from 'notiflix';
 import { searchMovie } from "js/movieApi";
+import css from './Movies.module.css';
 
 const Movies = () => {
     const [movies, setMovies] = useState([]);
@@ -11,6 +12,7 @@ const Movies = () => {
 
     const query = searchParams.get('query') ?? '';
     const location = useLocation();
+    console.log(query);
 
     useEffect(() => {
         if (query === '') {
@@ -31,9 +33,10 @@ const Movies = () => {
     }, [query]);
 
     const updateQuery = query => {
-        const nextParams = query !== '' ? { query } : {};
-        setSearchParams(nextParams);
-        console.log(nextParams);
+        // const nextParams = query !== '' ? { query } : {};
+        console.log(query);
+        setSearchParams({ query });
+        console.log({ query });
     }
 
     const handleInputChange = e => {
@@ -44,7 +47,7 @@ const Movies = () => {
         e.preventDefault();
         // setSearchParams(e);
         reset();
-        updateQuery(query);
+        updateQuery(searchQuery);
     }
 
     const reset = () => {
@@ -53,7 +56,7 @@ const Movies = () => {
     }
 
     return (
-        <>
+        <div className={css.box}>
             {error && Notiflix.Notify.warning('Sorry, there are no movies matching your search query. Please try again.')}
             <header className="Searchbar">
                 <form className="SearchForm" onSubmit={handleSubmit}>
@@ -73,10 +76,11 @@ const Movies = () => {
                 </form>
             </header>
 
-            {movies.length > 0 && movies.map(({ id, title, poster_path }) => (
-                <ul>
-                    <li key={id}>
-                        <Link
+            <ul className={css.list}>
+                {movies.length > 0 && movies.map(({ id, title, poster_path }) => (
+
+                    <li key={id} className={css.list_item}>
+                        <Link className={css.link}
                             to={`/movies/${id}`} state={{ from: location }}
                         >
                             <img
@@ -87,12 +91,13 @@ const Movies = () => {
                                 }
                                 width="200" height="150"
                                 alt={title} />
-                            <p>{title}</p>
+                            <p className={css.title}>{title}</p>
                         </Link>
                     </li>
-                </ul>
-            ))}
-        </>
+                ))}
+
+            </ul>
+        </div>
     );
 }
 

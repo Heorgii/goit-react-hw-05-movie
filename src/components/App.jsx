@@ -1,34 +1,24 @@
-import Loader from "./Loader/Loader";
-// import {  lazy } from "react";
+import { lazy } from "react";
 import { Suspense } from "react";
 import { Route, Routes } from 'react-router-dom';
-import MovieReviews from "page/Reviews/Reviews";
-import MovieCast from "page/Cast/Cast";
-import AppBar from "./SharedLayout/SharedLayout";
-import Home from "page/Home/Home";
-import Movies from "page/Movies/Movies";
-import MovieDetails from "page/MovieDetails/MovieDetails";
-import Navigation from "./Navigation/Navigation";
-
 import 'styles.css';
-// const Home = lazy(() => {
-//   import('../page/Home/Home');
-// });
 
-// const Movies = lazy(() => {
-//   import('../page/Movies/Movies');
-// });
-
-// const MovieDetails = lazy(() => {
-//   import('../page/MovieDetails/MovieDetails');
-// });
+const AppBar = lazy(() => import('./SharedLayout/SharedLayout'));
+const Loader = lazy(() => import('./Loader/Loader'));
+const Navigation = lazy(() => import('./Navigation/Navigation'));
+const Home = lazy(() => import('../page/Home/Home'));
+const Movies = lazy(() => import('../page/Movies/Movies'));
+const MovieDetails = lazy(() => import('../page/MovieDetails/MovieDetails'));
+const MovieReviews = lazy(() => import('../page/Reviews/Reviews'));
+const MovieCast = lazy(() => import('../page/Cast/Cast'));
 
 export const App = () => {
   return (
     <div>
+        <Navigation />
+
       <Suspense fallback={<Loader />}>
 
-        <Navigation />
         <Routes>
           <Route path="/" element={<AppBar />} >
             <Route index element={<Home />} />
@@ -38,7 +28,7 @@ export const App = () => {
               <Route path="cast" element={<MovieCast />} />
             </Route>
           </Route>
-          <Route path="*" element={Home} />
+          <Route path="*" element={<Home />} />
         </Routes>
 
       </Suspense>
